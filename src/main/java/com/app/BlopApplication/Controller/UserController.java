@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
 import java.security.AuthProvider;
 import java.util.List;
 
@@ -32,14 +33,27 @@ public class UserController {
 
     //POST request to "/users/login"
     @RequestMapping(method= RequestMethod.POST,value="/users/login")
-    public String loginUser(User user){
+    public String loginUser(User user, HttpSession session){
         //Check if the credential match
-        if(userService.login(user)){
+        /*if(userService.login(user)){
             return "redirect:/posts";
         }
         else{
             return "users/login";
+        }*/
+        User existingUser=userService.login(user);
+        if(existingUser == null) {
+            System.out.println("USER DOES NOT EXIST");
+            return "users/login";
         }
+        else {
+            // Maintain the Session
+            session.setAttribute("LoggedUser", existingUser);
+
+            System.out.println("USER FOUND!");
+            return "redirect:/posts";
+        }
+
     }
 
     @RequestMapping(method=RequestMethod.GET,value="/users/registration")
@@ -61,9 +75,11 @@ public class UserController {
     }
 
     @RequestMapping("/users/logout")
-    public String userLogout(Model model){
-        List<Post> posts=postService.getAllPosts();
-        model.addAttribute("posts",posts);
+    public String userLogout(Model model, HttpSession session){
+        //Kill Session
+        session.invalidate();
+        /*List<Post> posts=postService.getAllPosts();
+        model.addAttribute("posts",posts);*/
         return "redirect:/";
     }
 }

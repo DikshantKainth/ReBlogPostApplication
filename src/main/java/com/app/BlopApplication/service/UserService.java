@@ -14,16 +14,25 @@ public class UserService {
 
     //Hard Coded Content
 
-    public boolean login(User user){
-        if(user.getUsername().equals("Dikshant") && user.getPassword().equals("chitkara"))
+    @Autowired
+    private UserRepository userRepository;
+    public User login(User user){
+        /*if(user.getUsername().equals("Dikshant") && user.getPassword().equals("chitkara"))
             return true;
         else
-            return false;
+            return false;*/
+        User existingUser=userRepository.checkCredentials(user.getUsername(),user.getPassword());
+        if(existingUser==null){
+            return null;
+        }
+        else{
+            return existingUser;
+        }
+
+
     }
     //__________________________________________________________________________________________________________________
 
-    @Autowired
-    private UserRepository userRepository;
 
     public void registerUser(User newUser){
         userRepository.registerUser(newUser);

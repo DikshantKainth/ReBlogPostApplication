@@ -14,10 +14,15 @@ public class PostRepository {
     }
     @PersistenceUnit(unitName = "techblog")
     private EntityManagerFactory entityManagerFactory;
-
-    public List<Post> getAllPosts() {
+                                  //userId received to get particular post of user.
+    public List<Post> getAllPosts(Integer userId) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        TypedQuery<Post> query = entityManager.createQuery("select p from Post p", Post.class);
+                                                            //Query Changed
+        TypedQuery<Post> query = entityManager.createQuery("select p from Post p JOIN FETCH p.user puser WHERE puser.id=:userId", Post.class);
+
+        //Added below line
+        query.setParameter("userId",userId);
+
         List<Post> result = query.getResultList();
         return result;
     }

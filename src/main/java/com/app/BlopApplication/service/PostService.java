@@ -35,9 +35,10 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
-    public List<Post> getAllPosts(){
+                                 //userId added to get particular post of user
+    public List<Post> getAllPosts(Integer userId){
 
-        return postRepository.getAllPosts();
+        return postRepository.getAllPosts(userId);
 
         //------------------------------------------------------------------------------------------------------------
 

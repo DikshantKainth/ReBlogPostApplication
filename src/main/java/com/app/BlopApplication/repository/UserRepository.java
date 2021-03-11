@@ -21,7 +21,8 @@ public class UserRepository {
             entityManager.persist(newUser);
             transaction.commit();
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.out.println(e);
             transaction.rollback();
         }
@@ -39,10 +40,5 @@ public class UserRepository {
             //System.out.println(e);
             return null;
         }
-
-
-
-
-
     }
 }
